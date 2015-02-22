@@ -10,3 +10,11 @@ if ! command -v gcov >/dev/null 2>&1; then
   echo "xcoverage needs gcov to analyse coverage files"
   exit 1
 fi
+
+command_name="$(basename $0)"
+
+# xcoverage will put all build files, including derived data,
+# in the $build_directory. The $build_directory will be created in the
+# path xcoverage was called in
+build_directory="$command_name-build"
+derived_data_directory="$build_directory/derived-data"
