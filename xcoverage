@@ -126,3 +126,46 @@ while [[ $# > 0 ]]; do
 
 shift
 done
+
+if [[ -z "$project" ]]; then
+  projects=$(find . -maxdepth 1 -name '*.xcodeproj' -type d)
+  project_count=$(echo $projects | wc -l)
+
+  # if there is more than 1 xcodeproj in the current directory,
+  # xcoverage doesn't know which one to choose
+  if [[ $project_count -ne 1 ]]; then
+    echo -e "Please specify a path to a project with \"-project PATH\""
+    exit 1
+  else
+    # use sed to remove the "./" prefix,
+    # because basename doesn't work when filename contains spaces
+    project=$(echo $projects | sed -E 's/^.{2}//')
+    # get project name by removing ".xcodeproj" suffix
+    project_name=$(echo $project | sed 's/\.xcodeproj//')
+    project_argument="-project ${project}"
+  fi
+fi
+
+if [[ -z "$scheme" ]]; then
+  echo -e "Please specify a scheme with \"-scheme NAME\""
+  exit 1
+fi
+
+if [[ -z "$target" ]]; then
+  echo -e "Please specify a target with \"-target TARGET\""
+  exit 1
+fi
+
+if [[ (-z "$sdk") && (-z "$destination") ]]; then
+  echo -e "$command_name: Neither -sdk nor -destination specified"
+  echo -e "$command_name: Using \"-sdk iphonesimulator8.1\""
+  sdk="iphonesimulator8.1"
+  sdk_argument="-sdk ${sdk}"
+fi
+
+if [[ -z "$configuration" ]]; then
+  echo -e "$command_name: No configuration specified"
+  echo -e "$command_name: Using \"-configuration Debug\""
+  configuration="Debug"
+  configuration_argument="-configuration ${configuration}"
+fi
