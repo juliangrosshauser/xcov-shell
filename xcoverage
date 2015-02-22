@@ -24,3 +24,105 @@ function delete_build_directory() {
     rm -rf "$build_directory"
   fi
 }
+
+function print_usage_message() {
+  echo -e "Usage: $command_name [OPTIONS]\n"
+  echo -e "Options:"
+  echo -e "\t-help\t\t\t\tShow help"
+  echo -e "\t-project PATH\t\t\tPath to project"
+  echo -e "\t-target TARGET\t\t\tTarget to use for coverage analysis"
+  echo -e "\t-scheme NAME\t\t\tScheme to use for building"
+  echo -e "\t-destination DESTINATION\tUse the destination described by" \
+          "DESTINATION (a comma-separated set of key-value pairs describing" \
+          "the destination to use)"
+  echo -e "\t-sdk VERSION\t\t\tSDK to use for building (e.g. 8.0, 8.1)"
+  echo -e "\t-configuration NAME\t\tConfiguration to use (e.g. Debug, Release)"
+  echo -e "\t-clean\t\t\t\tDelete build directory ($build_directory)"
+}
+
+# parse arguments
+while [[ $# > 0 ]]; do
+  case "$1" in
+    -project)
+      if [[ -z "$2" ]]; then
+        echo -e "Missing PATH after ${1}\n"
+        print_usage_message
+        exit 1
+      fi
+
+      project="${2}"
+      project_argument="${1} ${2}"
+      shift
+      ;;
+    -target)
+      if [[ -z "$2" ]]; then
+        echo -e "Missing TARGET after ${1}\n"
+        print_usage_message
+        exit 1
+      fi
+
+      target="${2}"
+      target_argument="${1} ${2}"
+      shift
+      ;;
+    -scheme)
+      if [[ -z "$2" ]]; then
+        echo -e "Missing NAME after ${1}\n"
+        print_usage_message
+        exit 1
+      fi
+
+      scheme="${2}"
+      scheme_argument="${1} ${2}"
+      shift
+      ;;
+    -destination)
+      if [[ -z "$2" ]]; then
+        echo -e "Missing DESTINATION after ${1}\n"
+        print_usage_message
+        exit 1
+      fi
+
+      destination="${2}"
+      destination_argument="${1} ${2}"
+      shift
+      ;;
+    -sdk)
+      if [[ -z "$2" ]]; then
+        echo -e "Missing VERSION after ${1}\n"
+        print_usage_message
+        exit 1
+      fi
+
+      sdk="${2}"
+      sdk_argument="${1} ${2}"
+      shift
+      ;;
+    -configuration)
+      if [[ -z "$2" ]]; then
+        echo -e "Missing NAME after ${1}\n"
+        print_usage_message
+        exit 1
+      fi
+
+      configuration="${2}"
+      configuration_argument="${1} ${2}"
+      shift
+      ;;
+    -clean)
+      delete_build_directory
+      exit 0
+      ;;
+    -help)
+      print_usage_message
+      exit 0
+      ;;
+    *)
+      echo -e "Unknown option ${1}\n"
+      print_usage_message
+      exit 1
+      ;;
+  esac
+
+shift
+done
