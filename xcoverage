@@ -24,6 +24,7 @@ command_name="$(basename $0)"
 # path xcoverage was called in
 build_directory="$command_name-build"
 derived_data_directory="$build_directory/derived-data"
+coverage_directory="$build_directory/coverage-files"
 
 function delete_build_directory() {
   if [[ -d "$build_directory" ]]; then
@@ -206,3 +207,16 @@ coverage_files_directory="${derived_data_directory}/Build/Intermediates/\
 ${project_name}.build/\
 ${configuration}-iphonesimulator/\
 ${target}.build/Objects-normal/i386"
+
+coverage_files=$(find ${coverage_files_directory} \
+                 -maxdepth 1 -type f -name '*.gcno' -o -name '*.gcda')
+
+if [[ -n "$coverage_files" ]]; then
+  mkdir "$coverage_directory"
+
+  for file in $coverage_files; do
+    cp $file "$coverage_directory"
+  done
+else
+  echo "No code coverage files found"
+fi
