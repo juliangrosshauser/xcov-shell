@@ -169,3 +169,9 @@ if [[ -z "$configuration" ]]; then
   configuration="Debug"
   configuration_argument="-configuration ${configuration}"
 fi
+
+# delete old build directory
+delete_build_directory
+
+# create new build directory
+mkdir "$build_directory"
