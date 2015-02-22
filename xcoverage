@@ -18,3 +18,9 @@ command_name="$(basename $0)"
 # path xcoverage was called in
 build_directory="$command_name-build"
 derived_data_directory="$build_directory/derived-data"
+
+function delete_build_directory() {
+  if [[ -d "$build_directory" ]]; then
+    rm -rf "$build_directory"
+  fi
+}
