@@ -195,3 +195,9 @@ function xcodebuild_test() {
   GCC_GENERATE_TEST_COVERAGE_FILES=YES \
   GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=YES
 }
+
+if [[ $xcpretty_available -ne 0 ]]; then
+  xcodebuild_test | xcpretty -c
+else
+  xcodebuild_test
+fi
