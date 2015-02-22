@@ -201,3 +201,8 @@ if [[ $xcpretty_available -ne 0 ]]; then
 else
   xcodebuild_test
 fi
+
+coverage_files_directory="${derived_data_directory}/Build/Intermediates/\
+${project_name}.build/\
+${configuration}-iphonesimulator/\
+${target}.build/Objects-normal/i386"
