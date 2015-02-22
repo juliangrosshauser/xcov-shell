@@ -175,3 +175,17 @@ delete_build_directory
 
 # create new build directory
 mkdir "$build_directory"
+
+# call xcodebuild test with the specified arguments
+function xcodebuild_test() {
+  xcodebuild test \
+  $project_argument \
+  $scheme_argument \
+  $destination_argument \
+  $sdk_argument \
+  $configuration_argument \
+  -derivedDataPath $derived_data_directory \
+  GCC_GENERATE_DEBUGGING_SYMBOLS=YES \
+  GCC_GENERATE_TEST_COVERAGE_FILES=YES \
+  GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=YES
+}
