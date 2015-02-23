@@ -8,16 +8,6 @@ if ! command -v xcodebuild >/dev/null 2>&1; then
   exit 1
 fi
 
-if ! command -v gcov >/dev/null 2>&1; then
-  echo "${command_name} needs gcov to analyse coverage files"
-  exit 1
-fi
-
-if ! command -v lcov >/dev/null 2>&1; then
-  echo "${command_name} needs lcov to build coverage reports"
-  exit 1
-fi
-
 xcpretty_available=0
 
 if command -v xcpretty >/dev/null 2>&1; then
@@ -204,6 +194,20 @@ if [[ -z "$output_format" ]]; then
 else
   if [[ ("$output_format" != "gcov") && ("$output_format" != "lcov") ]]; then
     echo -e "The only output formats available are \"gcov\" and \"lcov\""
+    exit 1
+  fi
+fi
+
+if [[ "$output_format" == "gcov" ]]; then
+  # check if gcov is available
+  if ! command -v gcov >/dev/null 2>&1; then
+    echo "${command_name} needs gcov to analyse coverage files"
+    exit 1
+  fi
+else
+  # check if lcov is available
+  if ! command -v lcov >/dev/null 2>&1; then
+    echo "${command_name} needs lcov to build coverage reports"
     exit 1
   fi
 fi
