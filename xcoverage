@@ -266,4 +266,12 @@ if [[ "$output_format" == "gcov" ]]; then
 
   # gcov puts its output files into the current directory
   mv *.gcov ${coverage_directory}
+else
+  lcov --capture --directory ${coverage_directory} --output-file \
+    ${coverage_directory}/coverage.info
+
+  genhtml ${coverage_directory}/coverage.info --output-directory \
+    ${coverage_directory}/html
+
+  open ${coverage_directory}/html/index.html
 fi
