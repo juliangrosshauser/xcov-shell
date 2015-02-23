@@ -4,12 +4,12 @@ command_name="$(basename $0)"
 
 # check dependencies
 if ! command -v xcodebuild >/dev/null 2>&1; then
-  echo "xcoverage needs xcodebuild to build coverage files"
+  echo "${command_name} needs xcodebuild to build coverage files"
   exit 1
 fi
 
 if ! command -v gcov >/dev/null 2>&1; then
-  echo "xcoverage needs gcov to analyse coverage files"
+  echo "${command_name} needs gcov to analyse coverage files"
   exit 1
 fi
 
