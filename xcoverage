@@ -13,6 +13,11 @@ if ! command -v gcov >/dev/null 2>&1; then
   exit 1
 fi
 
+if ! command -v lcov >/dev/null 2>&1; then
+  echo "${command_name} needs lcov to build coverage reports"
+  exit 1
+fi
+
 xcpretty_available=0
 
 if command -v xcpretty >/dev/null 2>&1; then
