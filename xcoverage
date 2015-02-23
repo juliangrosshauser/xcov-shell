@@ -229,3 +229,16 @@ if [[ -n "$coverage_files" ]]; then
 else
   echo "No code coverage files found"
 fi
+
+coverage_files=$(ls ${coverage_directory}/*.gcno)
+
+for file in $coverage_files; do
+  # remove path prefix and file type suffix
+  filename=$(basename ${file} | sed 's/\.gcno//')
+
+  sourcefile=$(find ${project_name} -type f -name ${filename}.m)
+
+  xcrun gcov ${sourcefile} -o ${coverage_directory}
+done
+
+mv *.gcov ${coverage_directory}
