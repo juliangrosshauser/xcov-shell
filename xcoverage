@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+command_name="$(basename $0)"
+
 # check dependencies
 if ! command -v xcodebuild >/dev/null 2>&1; then
   echo "xcoverage needs xcodebuild to build coverage files"
@@ -16,8 +18,6 @@ xcpretty_available=0
 if command -v xcpretty >/dev/null 2>&1; then
   xcpretty_available=1
 fi
-
-command_name="$(basename $0)"
 
 # xcoverage will put all build files, including derived data,
 # in the $build_directory. The $build_directory will be created in the
