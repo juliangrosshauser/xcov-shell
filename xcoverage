@@ -197,6 +197,17 @@ if [[ -z "$configuration" ]]; then
   configuration_argument="-configuration ${configuration}"
 fi
 
+if [[ -z "$output_format" ]]; then
+  echo -e "$command_name: No output format specified"
+  echo -e "$command_name: Using \"-output-format lcov\""
+  output_format="lcov"
+else
+  if [[ ("$output_format" != "gcov") && ("$output_format" != "lcov") ]]; then
+    echo -e "The only output formats available are \"gcov\" and \"lcov\""
+    exit 1
+  fi
+fi
+
 # delete old build directory
 delete_build_directory
 
