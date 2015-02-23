@@ -159,13 +159,17 @@ if [[ -z "$project" ]]; then
 fi
 
 if [[ -z "$scheme" ]]; then
-  echo -e "Please specify a scheme with \"-scheme NAME\""
-  exit 1
+  echo -e "$command_name: No scheme specified"
+  echo -e "$command_name: Using \"-scheme ${project_name}\""
+  scheme="$project_name"
+  scheme_argument="-scheme ${scheme}"
 fi
 
 if [[ -z "$target" ]]; then
-  echo -e "Please specify a target with \"-target TARGET\""
-  exit 1
+  echo -e "$command_name: No target specified"
+  echo -e "$command_name: Using \"-target ${project_name}\""
+  target="$project_name"
+  target_argument="-target ${target}"
 fi
 
 if [[ (-z "$sdk") && (-z "$destination") ]]; then
