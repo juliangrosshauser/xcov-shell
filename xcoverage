@@ -49,6 +49,7 @@ function print_usage_message() {
           "the destination to use)"
   echo -e "\t-sdk VERSION\t\t\tSDK to use for building (e.g. 8.0, 8.1)"
   echo -e "\t-configuration NAME\t\tConfiguration to use (e.g. Debug, Release)"
+  echo -e "\t-output-format FORMAT\t\tOutput format (gcov or lcov)"
   echo -e "\t-clean\t\t\t\tDelete build directory ($build_directory)"
 }
 
@@ -119,6 +120,16 @@ while [[ $# > 0 ]]; do
 
       configuration="${2}"
       configuration_argument="${1} ${2}"
+      shift
+      ;;
+    -output-format)
+      if [[ -z "$2" ]]; then
+        echo -e "Missing FORMAT after ${1}\n"
+        print_usage_message
+        exit 1
+      fi
+
+      output_format="${2}"
       shift
       ;;
     -clean)
