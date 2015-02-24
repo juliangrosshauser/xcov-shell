@@ -1,4 +1,4 @@
-# xcoverage
+# xcov
 
 ## License
 [MIT](LICENSE)

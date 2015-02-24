@@ -14,9 +14,9 @@ if command -v xcpretty >/dev/null 2>&1; then
   xcpretty_available=1
 fi
 
-# xcoverage will put all build files, including derived data,
+# xcov will put all build files, including derived data,
 # in the $build_directory. The $build_directory will be created in the
-# path xcoverage was called in
+# path xcov was called in
 build_directory="$command_name-build"
 derived_data_directory="$build_directory/derived-data"
 coverage_directory="$build_directory/coverage-files"
@@ -145,7 +145,7 @@ if [[ -z "$project" ]]; then
   project_count=$(echo $projects | wc -l)
 
   # if there is more than 1 xcodeproj in the current directory,
-  # xcoverage doesn't know which one to choose
+  # xcov doesn't know which one to choose
   if [[ $project_count -ne 1 ]]; then
     echo -e "Please specify a path to a project with \"-project PATH\""
     exit 1
