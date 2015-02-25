@@ -1,7 +1,8 @@
 # xcov
 [![License](https://img.shields.io/badge/license-MIT-3f3f3f.svg)](http://choosealicense.com/licenses/mit)
 
-Xcode Code Coverage CLI
+**Xcode Code Coverage CLI**  
+View the code coverage of your tests without changing the build settings of your Xcode project.
 
 ## Dependencies
 * [`xcodebuild`](https://developer.apple.com/library/mac/documentation/Darwin/Reference/ManPages/man1/xcodebuild.1.html)
