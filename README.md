@@ -1,6 +1,6 @@
 # xcov
 
-## Installing
+## Install
 Clone this repository and symlink `xcov` somewhere in your path:
 
 ```shell
