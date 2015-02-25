@@ -291,6 +291,12 @@ else
   xcodebuild_test
 fi
 
+# check if `xcodebuild` was successfull before continuing
+if [[ $? -ne 0 ]]; then
+  echo -e "${command_name}: xcodebuild reported an error"
+  exit 1
+fi
+
 if [[ -z "$workspace_name" ]]; then
   coverage_files_directory="${derived_data_directory}/Build/Intermediates/\
 ${project_name}.build/\
