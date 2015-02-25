@@ -4,6 +4,7 @@
 Xcode Code Coverage CLI
 
 ## Usage
+```
 Usage: xcov [OPTIONS]
 
 Options:
@@ -17,6 +18,7 @@ Options:
   -configuration NAME       Configuration to use (e.g. Debug, Release)
   -output-format FORMAT     Output format (gcov or lcov)
   -clean                    Delete build directory (xcov-build)
+```
 
 ## Install
 Clone this repository and symlink `xcov` somewhere in your path:
