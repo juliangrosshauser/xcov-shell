@@ -56,6 +56,10 @@ while [[ $# > 0 ]]; do
 
       project="${2}"
       project_argument="${1} ${2}"
+      # get project name by removing path prefix and ".xcodeproj" suffix
+      project_name=$(basename $project | sed 's/\.xcodeproj//')
+      shift
+      ;;
     -workspace)
       if [[ -z "$2" ]]; then
         echo -e "Missing PATH after ${1}\n"
