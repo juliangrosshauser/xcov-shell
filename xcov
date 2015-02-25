@@ -32,6 +32,7 @@ function print_usage_message() {
   echo -e "Options:"
   echo -e "\t-help\t\t\t\tShow help"
   echo -e "\t-project PATH\t\t\tPath to project"
+  echo -e "\t-workspace PATH\t\t\tPath to workspace"
   echo -e "\t-target TARGET\t\t\tTarget to use for coverage analysis"
   echo -e "\t-scheme NAME\t\t\tScheme to use for building"
   echo -e "\t-destination DESTINATION\tUse the destination described by" \
@@ -55,6 +56,17 @@ while [[ $# > 0 ]]; do
 
       project="${2}"
       project_argument="${1} ${2}"
+    -workspace)
+      if [[ -z "$2" ]]; then
+        echo -e "Missing PATH after ${1}\n"
+        print_usage_message
+        exit 1
+      fi
+
+      workspace="${2}"
+      workspace_argument="${1} ${2}"
+      # get project name by removing path prefix and ".xcworkspace" suffix
+      workspace_name=$(basename $workspace | sed 's/\.xcworkspace//')
       shift
       ;;
     -target)
@@ -140,14 +152,15 @@ while [[ $# > 0 ]]; do
 shift
 done
 
-if [[ -z "$project" ]]; then
+if [[ (-z "$project") && (-z "$workspace") ]]; then
   projects=$(find . -maxdepth 1 -name '*.xcodeproj' -type d)
   project_count=$(echo $projects | wc -l)
 
   # if there is more than 1 xcodeproj in the current directory,
   # xcov doesn't know which one to choose
   if [[ $project_count -ne 1 ]]; then
-    echo -e "Please specify a path to a project with \"-project PATH\""
+    echo -e "Please specify a path to a project with \"-project PATH\" \
+            or to a workspace with \"-workspace PATH\""
     exit 1
   else
     # use sed to remove the "./" prefix,
@@ -159,17 +172,38 @@ if [[ -z "$project" ]]; then
   fi
 fi
 
+# prefer workspace over project
+if [[ -n "$workspace" ]]; then
+  if [[ -n "$project" ]]; then
+    project=""
+    project_name=""
+    project_argument=""
+  fi
+fi
+
 if [[ -z "$scheme" ]]; then
   echo -e "$command_name: No scheme specified"
-  echo -e "$command_name: Using \"-scheme ${project_name}\""
-  scheme="$project_name"
+  if [[ -z "$workspace" ]]; then
+    echo -e "$command_name: Using \"-scheme ${project_name}\""
+    scheme="$project_name"
+  else
+    echo -e "$command_name: Using \"-scheme ${workspace_name}\""
+    scheme="$workspace_name"
+  fi
+
   scheme_argument="-scheme ${scheme}"
 fi
 
 if [[ -z "$target" ]]; then
   echo -e "$command_name: No target specified"
-  echo -e "$command_name: Using \"-target ${project_name}\""
-  target="$project_name"
+  if [[ -z "$workspace" ]]; then
+    echo -e "$command_name: Using \"-target ${project_name}\""
+    target="$project_name"
+  else
+    echo -e "$command_name: Using \"-target ${workspace_name}\""
+    target="$workspace_name"
+  fi
+
   target_argument="-target ${target}"
 fi
 
@@ -222,6 +256,7 @@ mkdir "$build_directory"
 function xcodebuild_test() {
   xcodebuild test \
   $project_argument \
+  $workspace_argument \
   $scheme_argument \
   $destination_argument \
   $sdk_argument \
@@ -238,10 +273,17 @@ else
   xcodebuild_test
 fi
 
-coverage_files_directory="${derived_data_directory}/Build/Intermediates/\
+if [[ -z "$workspace_name" ]]; then
+  coverage_files_directory="${derived_data_directory}/Build/Intermediates/\
 ${project_name}.build/\
 ${configuration}-iphonesimulator/\
 ${target}.build/Objects-normal/i386"
+else
+  coverage_files_directory="${derived_data_directory}/Build/Intermediates/\
+${workspace_name}.build/\
+${configuration}-iphonesimulator/\
+${target}.build/Objects-normal/i386"
+fi
 
 coverage_files=$(find ${coverage_files_directory} \
                  -maxdepth 1 -type f -name '*.gcno' -o -name '*.gcda')
@@ -263,7 +305,11 @@ if [[ "$output_format" == "gcov" ]]; then
     # remove path prefix and file type suffix
     filename=$(basename ${file} | sed 's/\.gcno//')
 
-    sourcefile=$(find ${project_name} -type f -name ${filename}.m)
+    if [[ -z "$workspace_name" ]]; then
+      sourcefile=$(find ${project_name} -type f -name ${filename}.m)
+    else
+      sourcefile=$(find ${workspace_name} -type f -name ${filename}.m)
+    fi
 
     xcrun gcov ${sourcefile} -o ${coverage_directory}
   done

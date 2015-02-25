@@ -6,6 +6,7 @@ Usage: xcov [OPTIONS]
 Options:
   -help                     Show help
   -project PATH             Path to project
+  -workspace PATH           Path to workspace
   -target TARGET            Target to use for coverage analysis
   -scheme NAME              Scheme to use for building
   -destination DESTINATION  Use the destination described by DESTINATION (a comma-separated set of key-value pairs describing the destination to use)
