@@ -3,6 +3,15 @@
 
 Xcode Code Coverage CLI
 
+## Dependencies
+* [`xcodebuild`](https://developer.apple.com/library/mac/documentation/Darwin/Reference/ManPages/man1/xcodebuild.1.html)
+* [`gcov`](https://developer.apple.com/library/mac/documentation/Darwin/Reference/ManPages/man1/gcov.1.html) or [`lcov`](http://ltp.sourceforge.net/coverage/lcov.php)
+
+If you have Xcode installed, `xcodebuild` and `gcov` will be available to you.  
+You can install `lcov` with [Homebrew](http://brew.sh): `$ brew install lcov`  
+`xcov` prefers `lcov`, because it produces HTML output.  
+You can also use [CoverStory](https://code.google.com/p/coverstory) to view your code coverage.
+
 ## Usage
 ```
 Usage: xcov [OPTIONS]
