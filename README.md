@@ -1,4 +1,7 @@
 # xcov
+[![License](https://img.shields.io/badge/license-MIT-3f3f3f.svg)](http://choosealicense.com/licenses/mit)
+
+Xcode Code Coverage CLI
 
 ## Usage
 Usage: xcov [OPTIONS]
