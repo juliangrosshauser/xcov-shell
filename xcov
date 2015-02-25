@@ -142,7 +142,7 @@ while [[ $# > 0 ]]; do
       delete_build_directory
       exit 0
       ;;
-    -help)
+    -help|--help|help|-h|--h)
       print_usage_message
       exit 0
       ;;
