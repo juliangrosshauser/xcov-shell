@@ -21,7 +21,7 @@ Options:
 ```
 
 ## Install
-Clone this repository and symlink `xcov` somewhere in your path:
+Clone this repository and symlink `xcov` somewhere in your `$PATH`:
 
 ```shell
 $ git clone https://github.com/juliangrosshauser/xcov.git
