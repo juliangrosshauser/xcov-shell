@@ -227,8 +227,22 @@ fi
 
 if [[ -z "$output_format" ]]; then
   echo -e "$command_name: No output format specified"
-  echo -e "$command_name: Using \"-output-format lcov\""
-  output_format="lcov"
+
+  # use lcov as default `output_format` if lcov is available
+  if command -v lcov >/dev/null 2>&1; then
+    echo -e "$command_name: Using \"-output-format lcov\""
+    output_format="lcov"
+  else
+    # set `output_format` to gcov if lcov isn't available
+    if command -v gcov >/dev/null 2>&1; then
+      echo -e "$command_name: Using \"-output-format gcov\""
+      output_format="gcov"
+    else
+      echo -e "${command_name} needs either \"gcov\" or \"lcov\" to analyse \
+              coverage files"
+      exit 1
+    fi
+  fi
 else
   if [[ ("$output_format" != "gcov") && ("$output_format" != "lcov") ]]; then
     echo -e "The only output formats available are \"gcov\" and \"lcov\""
