@@ -17,6 +17,7 @@ Options:
   -destination DESTINATION  Use the destination described by DESTINATION (a comma-separated set of key-value pairs describing the destination to use)
   -sdk VERSION              SDK to use for building (e.g. 8.0, 8.1)
   -configuration NAME       Configuration to use (e.g. Debug, Release)
+  -arch ARCH                Architecture to use (e.g. x86_64)
   -output-format FORMAT     Output format (gcov or lcov)
   -clean                    Delete build directory (xcov-build)
 ```

@@ -40,6 +40,7 @@ function print_usage_message() {
           "the destination to use)"
   echo -e "\t-sdk VERSION\t\t\tSDK to use for building (e.g. 8.0, 8.1)"
   echo -e "\t-configuration NAME\t\tConfiguration to use (e.g. Debug, Release)"
+  echo -e "\t-arch ARCH\t\t\tArchitecture to use (e.g. x86_64)"
   echo -e "\t-output-format FORMAT\t\tOutput format (gcov or lcov)"
   echo -e "\t-clean\t\t\t\tDelete build directory ($build_directory)"
 }
@@ -126,6 +127,17 @@ while [[ $# > 0 ]]; do
 
       configuration="${2}"
       configuration_argument="${1} ${2}"
+      shift
+      ;;
+    -arch)
+      if [[ -z "$2" ]]; then
+        echo -e "Missing ARCH after ${1}\n"
+        print_usage_message
+        exit 1
+      fi
+
+      arch="${2}"
+      arch_argument="${1} ${2}"
       shift
       ;;
     -output-format)
@@ -225,6 +237,13 @@ if [[ -z "$configuration" ]]; then
   configuration_argument="-configuration ${configuration}"
 fi
 
+if [[ -z "$arch" ]]; then
+  echo -e "$command_name: No architecture specified"
+  echo -e "$command_name: Using \"-arch x86_64\""
+  arch="x86_64"
+  arch_argument="-arch ${arch}"
+fi
+
 if [[ -z "$output_format" ]]; then
   echo -e "$command_name: No output format specified"
 
@@ -301,12 +320,12 @@ if [[ -z "$workspace_name" ]]; then
   coverage_files_directory="${derived_data_directory}/Build/Intermediates/\
 ${project_name}.build/\
 ${configuration}-iphonesimulator/\
-${target}.build/Objects-normal/i386"
+${target}.build/Objects-normal/${arch}"
 else
   coverage_files_directory="${derived_data_directory}/Build/Intermediates/\
 ${workspace_name}.build/\
 ${configuration}-iphonesimulator/\
-${target}.build/Objects-normal/i386"
+${target}.build/Objects-normal/${arch}"
 fi
 
 coverage_files=$(find ${coverage_files_directory} \
